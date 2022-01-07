@@ -26,14 +26,14 @@ namespace WeightRaceAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.Include(w => w.Weights).ToListAsync();
+            return await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).ToListAsync();
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).FirstOrDefaultAsync(x => x.UserId == id);
 
             if (user == null)
             {
