@@ -26,7 +26,7 @@ namespace WeightRaceAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         // GET: api/User/5

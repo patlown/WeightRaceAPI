@@ -30,6 +30,20 @@ namespace WeightRaceAPI.Controllers
         }
 
         // GET: api/Weight/5
+        [HttpGet("GetUserWeights/{userId}")]
+        public async Task<ActionResult<IEnumerable<Weight>>> GetUserWeights(int userId)
+        {
+            var weight = await _context.Weights.Where(x => x.UserId == userId).OrderBy(d => d.LogDate).ToListAsync();
+
+            if (weight == null)
+            {
+                return NotFound();
+            }
+
+            return weight;
+        }
+
+        // GET: api/Weight/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Weight>> GetWeight(int id)
         {
