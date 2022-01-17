@@ -82,7 +82,7 @@ namespace WeightRaceAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction(nameof(GetUser), new { uid = user.UserUid }, user);
         }
 
         // DELETE: api/User/5
