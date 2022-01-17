@@ -30,10 +30,10 @@ namespace WeightRaceAPI.Controllers
         }
 
         // GET: api/User/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{uid}")]
+        public async Task<ActionResult<User>> GetUser(string uid)
         {
-            var user = await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).FirstOrDefaultAsync(x => x.UserId == id);
+            var user = await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).FirstOrDefaultAsync(x => x.UserUid == uid);
 
             if (user == null)
             {

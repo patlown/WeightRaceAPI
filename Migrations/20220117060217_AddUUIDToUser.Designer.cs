@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeightRaceAPI.Data;
 
@@ -10,9 +11,10 @@ using WeightRaceAPI.Data;
 namespace WeightRaceAPI.Migrations
 {
     [DbContext(typeof(WeightRaceContext))]
-    partial class WeightRaceContextModelSnapshot : ModelSnapshot
+    [Migration("20220117060217_AddUUIDToUser")]
+    partial class AddUUIDToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,8 +48,8 @@ namespace WeightRaceAPI.Migrations
                     b.Property<double>("StartWeight")
                         .HasColumnType("double");
 
-                    b.Property<string>("UserUid")
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("UserUid")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("UserId");
 
