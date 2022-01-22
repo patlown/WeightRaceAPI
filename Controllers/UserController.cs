@@ -30,8 +30,22 @@ namespace WeightRaceAPI.Controllers
         }
 
         // GET: api/User/5
-        [HttpGet("{uid}")]
-        public async Task<ActionResult<User>> GetUser(string uid)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            var user = await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).FirstOrDefaultAsync(x => x.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        // GET: api/User/5
+        [HttpGet("GetUserByUID/{uid}")]
+        public async Task<ActionResult<User>> GetUserByUID(string uid)
         {
             var user = await _context.Users.Include(w => w.Weights.OrderBy(x => x.LogDate)).FirstOrDefaultAsync(x => x.UserUid == uid);
 
@@ -82,7 +96,7 @@ namespace WeightRaceAPI.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { uid = user.UserUid }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
         }
 
         // DELETE: api/User/5

@@ -29,7 +29,6 @@ namespace WeightRaceAPI.Controllers
             return await _context.Weights.ToListAsync();
         }
 
-        // GET: api/Weight/5
         [HttpGet("GetUserWeights/{userId}")]
         public async Task<ActionResult<IEnumerable<Weight>>> GetUserWeights(int userId)
         {
@@ -94,6 +93,25 @@ namespace WeightRaceAPI.Controllers
         public async Task<ActionResult<Weight>> PostWeight(Weight weight)
         {
             _context.Weights.Add(weight);
+            await _context.SaveChangesAsync();
+
+            // Now that a new weight was added, recalculate the users stats
+            var user = await _context.Users.Include(w => w.Weights).FirstOrDefaultAsync(x => x.UserId == weight.UserId);
+
+            // If no user was found, return without recalculating stats
+            if (user == null || user.Weights == null || user.Weights.Count < 2)
+            {
+                return CreatedAtAction(nameof(GetWeight), new { id = weight.WeightId }, weight);
+            }
+
+            var orderedWeights = user.Weights.OrderByDescending(x => x.LogDate);
+            var total = Math.Round((orderedWeights.First().Value - orderedWeights.Last().Value), 2);
+            user.TotalChange = (double)total;
+
+            user.WeekChange = Utilities.WeightChangeDuringPeriod(orderedWeights, 7);
+            user.DayChange = Utilities.WeightChangeDuringPeriod(orderedWeights, 1);
+
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetWeight), new { id = weight.WeightId }, weight);

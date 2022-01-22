@@ -26,3 +26,8 @@ dotnet aspnet-codegenerator controller -name UserController -async -api -m User 
 dotnet user-secrets init
 dotnet user-secrest set ConnectionStrings:{ConnectionName} "server={SERVER};user={USER};password={PASSWORD};database={DBNAME}"
 ```
+
+6) Create script for some migrations (to apply on other environments)
+```
+dotnet ef migrations script {script one before latest}
+```

@@ -14,6 +14,9 @@ namespace WeightRaceAPI.Models
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public double StartWeight { get; set; }
+        public double? DayChange { get; set; }
+        public double? WeekChange { get; set; }
+        public double? TotalChange { get; set; }
 
         public List<Weight>? Weights { get; set; }
     }
